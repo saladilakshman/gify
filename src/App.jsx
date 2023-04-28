@@ -3,7 +3,7 @@ import './App.css';
 import {Typography,Stack, Button,Dialog,
   AppBar,TextField, ImageList, ImageListItem,
   useMediaQuery, Skeleton,Autocomplete,Card,
-  CardContent,CardMedia,CardActions,IconButton,DialogContent,DialogActions} from '@mui/material';
+  CardContent,CardMedia,CardActions,IconButton,DialogContent,DialogActions,CircularProgress} from '@mui/material';
   import ShareIcon from '@mui/icons-material/Share';
   import DownloadIcon from '@mui/icons-material/Download';
   import API from "./key";
@@ -107,13 +107,14 @@ const isMobile = useMediaQuery('(max-width:425px)');
       <Button variant="text"onClick={()=>setClose(false)}>close</Button>
     </DialogActions>
   </Dialog>
-  <Stack direction="row"justifyContent="center"alignItems='center'sx={{marginBlockStart:5}}>
-<ImageList variant="masonry"cols={mediabreakpoints.columns}gap={2} sx={{width:1000}}>
+  {loading?<Stack justifyContent='center'alignItems='center'>
+  <CircularProgress sx={{marginBlockStart:25}}/>
+  </Stack>:<Stack direction="row"justifyContent="center"alignItems='center'sx={{marginBlockStart:5}}>
+<ImageList variant="masonry"cols={isMobile?2:3}gap={2} sx={{width:1000}}>
 {data.map((item)=>{
   const{id,media_formats,content_description}=item;
   return <ImageListItem key={id}>
-{loading?<Skeleton variant="rectangular"
-height={500}></Skeleton>:<img src={media_formats?.tinygif?.url}
+<img src={media_formats?.tinygif?.url}
 alt=""
 loading="lazy"
 style={{borderRadius:'0.2rem'}}
@@ -124,11 +125,11 @@ onClick={(e)=>{
     memeSrc:e.target.src
   })
 }}
-/>}
+/>
   </ImageListItem>
 })}
 </ImageList>
-  </Stack>
+  </Stack>}
 <Dialog open={ishide}>
 <Card variant="elevation">
   <CardMedia 
